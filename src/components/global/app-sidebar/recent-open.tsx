@@ -13,6 +13,7 @@ import React from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSlideStore } from "@/store/useSlideStore";
+import { FileText } from "lucide-react";
 
 type Props = {
   recentProjects: Projects[];
@@ -35,22 +36,20 @@ export const RecentOpen = ({ recentProjects }: Props) => {
 
   return recentProjects.length > 0 ? (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-xs text-[#9ca3af] font-normal mb-2 px-0">
-        Recently Opened
-      </SidebarGroupLabel>
-      <SidebarMenu className="space-y-0">
+      <SidebarGroupLabel>Recently Opened</SidebarGroupLabel>
+      <SidebarMenu>
         {recentProjects.map((item) => (
           <SidebarMenuItem key={item.id}>
             <SidebarMenuButton
               asChild
               tooltip={item.title}
-              className="h-8 px-3 text-[#9ca3af] hover:text-white hover:bg-[#2a2a2a] rounded-md transition-colors"
             >
               <Button
                 onClick={() => handleClick(item.id, item.slides)}
                 variant="ghost"
-                className="w-full justify-start h-8 p-0 text-xs font-normal hover:bg-transparent"
+                className="w-full justify-start h-auto p-2"
               >
+                <FileText className="h-4 w-4" />
                 <span className="truncate">{item.title}</span>
               </Button>
             </SidebarMenuButton>

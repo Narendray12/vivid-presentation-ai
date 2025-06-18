@@ -9,6 +9,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenuButton,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import NavMain from "./nav-main";
 import { RecentOpen } from "./recent-open";
@@ -24,31 +25,33 @@ const AppSidebar = ({
   return (
     <Sidebar
       collapsible="icon"
-      className="w-[200px] bg-[#1a1a1a] border-r border-[#2a2a2a]"
       {...props}
     >
-      <SidebarHeader className="p-4">
+      <SidebarHeader>
         <SidebarMenuButton
-          className="hover:bg-transparent p-0 h-auto"
-          size={"lg"}
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-              <span className="text-black text-sm font-bold">V</span>
-            </div>
-            <span className="text-white text-lg font-semibold">Vivid</span>
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <span className="text-lg font-bold">V</span>
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">Vivid</span>
+            <span className="truncate text-xs">AI Presentations</span>
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
 
-      <SidebarContent className="px-4 flex flex-col gap-6">
+      <SidebarContent>
         <NavMain items={data.navMain} />
         <RecentOpen recentProjects={recentProjects} />
       </SidebarContent>
       
-      <SidebarFooter className="p-4 mt-auto"> 
+      <SidebarFooter>
         <NavFooter prismauser={user} />
       </SidebarFooter>
+      
+      <SidebarRail />
     </Sidebar>
   );
 };

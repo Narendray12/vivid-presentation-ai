@@ -20,27 +20,18 @@ const NavMain = ({ items }: {
   const pathname = usePathname();
   
   return (
-    <SidebarGroup className="p-0"> 
-      <SidebarMenu className="space-y-0">
+    <SidebarGroup>
+      <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
               asChild
               tooltip={item.title}
-              className={`
-                h-10 px-3 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#2a2a2a] transition-colors
-                ${pathname.includes(item.url) 
-                  ? 'text-white bg-[#2a2a2a]' 
-                  : ''
-                }
-              `}
+              isActive={pathname.includes(item.url)}
             >
-              <Link 
-                href={item.url}
-                className="flex items-center gap-3"
-              >
-                <item.icon className="h-4 w-4" />
-                <span className="text-sm">{item.title}</span>
+              <Link href={item.url}>
+                <item.icon />
+                <span>{item.title}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
