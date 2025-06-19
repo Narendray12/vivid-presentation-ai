@@ -60,17 +60,7 @@ export const recoverProject = async (projectId: string) => {
     if (checkUser.status !== 200 && checkUser.status !== 201) {
       return { status: 403, error: "User not authenticated" };
     }
-    const project = await client.projects.findUnique({
-      where: {
-        id: projectId,
-        userId: checkUser.user?.id,
-        isDeleted: false,
-      },
-    });
-    if (!project) {
-      return { status: 404, error: "Project not found" };
-    }
-    await client.projects.update({
+    const project = await client.projects.update({
       where: {
         id: projectId,
       },
@@ -78,6 +68,9 @@ export const recoverProject = async (projectId: string) => {
         isDeleted: false,
       },
     });
+    if (!project) {
+      return { status: 404, error: "Project not found" };
+    }
     return { status: 200, data: project };
   } catch (e) {
     console.log(e);
@@ -88,18 +81,21 @@ export const recoverProject = async (projectId: string) => {
 export const deleteProject = async (projectId: string) => {
   try {
     const checkUser = await onAuthenticateUser();
-    if (checkUser.status !== 200 && checkUser.status !== 201) {
+    if (checkUser.status !== 200 && !checkUser.user) {
       return { status: 403, error: "User not authenticated" };
     }
-    const project = await client.projects.delete({
+    const updatedProject = await client.projects.update({
       where: {
         id: projectId,
       },
+      data: {
+        isDeleted: true,
+      },
     });
-    if (!project) {
+    if (!updatedProject) {
       return { status: 404, error: "Project not found" };
     }
-    return { status: 200, data: project };
+    return { status: 200, data: updatedProject };
   } catch (e) {
     console.log(e);
     return { status: 500, error: "Internal server error" };
@@ -127,8 +123,8 @@ export const createProject = async (title: string, outlines: OutlineCard[]) => {
         userId: checkUser.user.id,
       },
     });
-    if(!project){
-        return {status:400,error:'Error creating project'}
+    if (!project) {
+      return { status: 400, error: "Error creating project" };
     }
     return { status: 200, data: project };
   } catch (e) {
@@ -136,7 +132,6 @@ export const createProject = async (title: string, outlines: OutlineCard[]) => {
     return { status: 500, error: "Internal server error" };
   }
 };
-
 
 export const getProjectById = async (projectId: string) => {
   try {

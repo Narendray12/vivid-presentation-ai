@@ -13,9 +13,9 @@ const ThemeSwiter = () => {
         return null
     }
   return (
-    <div>
+    <div className="ps-3 pe-3">
         <Switch checked={theme === "light"}
-        className="h-10 w-20 pl-1 data-[state=checked]:bg-primary-80 "
+        className="h-8 w-14 data-[state=checked]:bg-primary-80 "
         area-label="Toggle dark mode"
         onCheckedChange={()=>{
             setTheme(theme=='dark'?'light':'dark')

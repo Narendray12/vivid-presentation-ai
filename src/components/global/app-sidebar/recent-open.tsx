@@ -43,14 +43,14 @@ export const RecentOpen = ({ recentProjects }: Props) => {
             <SidebarMenuButton
               asChild
               tooltip={item.title}
+              className="hover:bg-primary-80"
             >
               <Button
                 onClick={() => handleClick(item.id, item.slides)}
-                variant="ghost"
-                className="w-full justify-start h-auto p-2"
+                variant="link"
+                className="text-xs items-center justify-center"
               >
-                <FileText className="h-4 w-4" />
-                <span className="truncate">{item.title}</span>
+                <span >{item.title}</span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>

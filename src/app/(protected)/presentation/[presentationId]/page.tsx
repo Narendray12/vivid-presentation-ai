@@ -7,6 +7,9 @@ import { useTheme } from "next-themes";
 import { redirect, useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
+import { DndProvider } from "react-dnd";
+import {HTML5Backend} from 'react-dnd-html5-backend'
+import NavBar from "./_components/NavBar/NavBar";
 const Page = () => {
   const { setSlides, setProjects, currentTheme, setCurrentTheme } =
     useSlideStore();
@@ -48,7 +51,11 @@ const Page = () => {
         </div>
     )
   }
-  return 
+  return <DndProvider backend={HTML5Backend}>
+<div className="min-h-screen flex flex-col">
+    <NavBar presentationId={params.presentationId as string} />
+</div>
+  </DndProvider>
 };
 
 export default Page;

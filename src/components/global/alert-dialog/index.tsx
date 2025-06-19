@@ -10,7 +10,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@radix-ui/react-alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 
 type props = {
@@ -44,7 +44,7 @@ const AlertDialogBox = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             variant={"destructive"}
-            className={className}
+            className={`${className}`}
             onClick={onclick}
           >
             {loading ? (

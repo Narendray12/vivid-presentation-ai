@@ -12,7 +12,7 @@ const layout = async (props: Props) => {
     if(!auth.user){
         redirect("/sign-in")
     }
-    return <div className="w-full min-h-screen">{props.children}</div>;
+    return (<div className="w-full min-h-screen">{props.children}</div>);
 };
 
 export default layout;

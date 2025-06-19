@@ -1,8 +1,9 @@
 "use client";
+
 import { JsonValue } from "@prisma/client/runtime/library";
 import React from "react";
 import { motion } from "framer-motion";
-import { itemVariants, themes, timeAgo, containerVariants } from "@/lib/constants";
+import { itemVariants, themes, timeAgo } from "@/lib/constants";
 import { useSlideStore } from "@/store/useSlideStore";
 import { useRouter } from "next/navigation";
 import ThumbnailPreview from "./thumbnail-preview";
@@ -36,6 +37,7 @@ const ProjectCard = ({
     router.push("/presentation/" + projectId);
   };
   const theme = themes.find((theme) => theme.name === themeName) || themes[0];
+
   const handleRecover = async () => {
     setLoading(true);
     if (!projectId) {
@@ -47,6 +49,18 @@ const ProjectCard = ({
     }
     try {
       const res = await recoverProject(projectId);
+      if(res.status!==200){
+        setLoading(false);
+        toast("Error", {
+          description: "Error recovering project.",
+        });
+        return
+      }
+      setOpen(false)
+      router.refresh()
+      toast("Success", {
+        description: "Project recovered successfully.",
+      });
     } catch (error) {
       setLoading(false);
       toast("Error", {
@@ -66,6 +80,18 @@ const ProjectCard = ({
     }
     try {
       const res = await deleteProject(projectId);
+      if(res.status!==200){
+        setLoading(false);
+        toast("Error", {
+          description: "Error deleting project.",
+        });
+        return
+      }
+      setOpen(false)
+      router.refresh()
+      toast("Success", {
+        description: "Project deleted successfully.",
+      });
     } catch (error) {
       setLoading(false);
       toast("Error", {
@@ -73,6 +99,7 @@ const ProjectCard = ({
       });
     }
   };
+  {console.log(isDeleted ? 'deleted' : 'not deleted')}
   return (
     <motion.div
       className={`group w-full flex flex-col gap-y-3 rounded-xl p-3 transition-colors ${
@@ -92,7 +119,7 @@ const ProjectCard = ({
       <div className="w-full">
         <div className="space-y-1">
           <h3 className="font-semibold text-base text-primary line-clamp-1">
-            {title}
+            {title} 
           </h3>
           <div className="flex w-full justify-between items-center gap-2">
             <p

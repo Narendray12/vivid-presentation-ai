@@ -1,54 +1,36 @@
 import React from "react";
 import { User } from "@prisma/client";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import SearchBar from "./upper-info-searchbar";
 import ThemeSwiter from "../mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import NewProjectButton from "./new-project-button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   user: User;
+  children: React.ReactNode;
 };
 
 const UpperInfoBar = ({ user }: Props) => {
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/dashboard">
-                Dashboard
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Projects</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      
-      <div className="ml-auto flex items-center gap-2 px-4">
-        <SearchBar />
-        <ThemeSwiter />
-        <Button variant="outline" size="sm" className="gap-2">
-          <Upload className="h-4 w-4" />
-          Import
-        </Button>
-        <NewProjectButton user={user} />
+    <header className="sticky top-0 z-[10] flex shrink-0 flex-wrap items-center gap-2 bg-background p-4 justify-between">
+      <SidebarTrigger className="-ml-1" />
+      <div className="w-full max-w-[95%] flex items-center justify-end">
+        <Separator className="mr-2 h-4" orientation="vertical" />
+        <div className="w-full max-w-[95%] flex items-center justify-between gap-4 flex-wrap">
+          <SearchBar />
+          <ThemeSwiter />
+          <div className="flex flex-wrap gap-4 items-center justfify-end">
+            <Button className="bg-primary-80 rounded-lg hover:bg-background-80 text-primary font-semibold cursor-not-allowed">
+              <Upload />
+              Import
+            </Button>
+          </div>
+
+          <NewProjectButton user={user} />
+        </div>
       </div>
     </header>
   );

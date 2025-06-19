@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Projects, User } from "@prisma/client";
 import React from "react";
@@ -14,6 +14,7 @@ import {
 import NavMain from "./nav-main";
 import { RecentOpen } from "./recent-open";
 import NavFooter from "./nav-footer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const AppSidebar = ({
   recentProjects,
@@ -25,32 +26,30 @@ const AppSidebar = ({
   return (
     <Sidebar
       collapsible="icon"
+      className="max-w-[212px] bg-background-90"
       {...props}
     >
-      <SidebarHeader>
+      <SidebarHeader className="py--6 px-3 pb-0">
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <span className="text-lg font-bold">V</span>
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+            <Avatar className="h-10 w-10 rounded-full">
+              <AvatarImage src={"/vivid.png"} alt="Avatar" />
+              <AvatarFallback className="rounded-lg">VI</AvatarFallback>
+            </Avatar>
           </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">Vivid</span>
-            <span className="truncate text-xs">AI Presentations</span>
-          </div>
+          <span className="truncate text-primary text-3xl">Vivid</span>
         </SidebarMenuButton>
       </SidebarHeader>
-
-      <SidebarContent>
+      <SidebarContent className="px-3 mt-10 gap-y-6">
         <NavMain items={data.navMain} />
         <RecentOpen recentProjects={recentProjects} />
       </SidebarContent>
-      
       <SidebarFooter>
         <NavFooter prismauser={user} />
       </SidebarFooter>
-      
       <SidebarRail />
     </Sidebar>
   );

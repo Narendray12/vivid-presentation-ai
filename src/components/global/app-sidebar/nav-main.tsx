@@ -1,11 +1,18 @@
 "use client";
 
-import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import {
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const NavMain = ({ items }: {
+const NavMain = ({
+  items,
+}: {
   items: {
     title: string;
     url: string;
@@ -18,9 +25,9 @@ const NavMain = ({ items }: {
   }[];
 }) => {
   const pathname = usePathname();
-  
+
   return (
-    <SidebarGroup>
+    <SidebarGroup className="p-0">
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
@@ -28,8 +35,14 @@ const NavMain = ({ items }: {
               asChild
               tooltip={item.title}
               isActive={pathname.includes(item.url)}
+              className="bg-background-80 "
             >
-              <Link href={item.url}>
+              <Link
+                href={item.url}
+                className={`text-lg ${
+                  pathname.includes(item.url) && "font-bold"
+                }`}
+              >
                 <item.icon />
                 <span>{item.title}</span>
               </Link>

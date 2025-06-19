@@ -7,6 +7,8 @@ import { ArrowLeft } from "lucide-react";
 import { redirect, useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ThemeCard from "./ThemeCard";
+import { themes } from "@/lib/constants";
+import ThemePicker from "./ThemePicker";
 
 const ThemePreview = () => {
   const router = useRouter();
@@ -133,7 +135,10 @@ const ThemePreview = () => {
       </Button>
     </div>
   );
-
+  const applyTheme = (theme:Theme)=>{
+    setSelectedTheme(theme)
+    setCurrentTheme(theme)
+  }
   return (
     <div
       className="h-screen w-full flex"
@@ -187,6 +192,11 @@ const ThemePreview = () => {
           </div>
         </div>
       </div>
+      <ThemePicker 
+        selectedTheme={selectedTheme}
+        themes={themes}
+        onThemeSelect={applyTheme}
+      />
     </div>
   );
 };

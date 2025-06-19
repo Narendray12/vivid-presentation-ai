@@ -1,8 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { useUser } from "@clerk/nextjs";
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
+import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import { User } from "@prisma/client";
 import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,84 +25,58 @@ const NavFooter = ({ prismauser }: { prismauser: User }) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  
+
   if (!isLoaded || !isSignedIn) {
     return null;
   }
-  
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <div className="group-data-[collapsible=icon]:hidden">
+        <div className="flex flex-col gap-y-6 items-start group-data-[collapsible=icon]:hidden">
           {!prismauser.subscription && (
-            <div className="mb-2 rounded-lg border bg-background p-3">
-              <div className="mb-2 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-orange-500" />
-                <span className="text-sm font-semibold">Get Creative AI</span>
+            <div className="flex flex-col items-start p-2 pb-3 gap-4 bg-background-80 rounded-xl">
+              <div className=" flex flex-col items-start gap-1">
+                <p className="text-base font-bold">
+                  Get
+                  <span className="text-vivid">Creative AI</span>
+                </p>
+                <span className="text-sm dark:test-secondary">
+                  Unlock all features including AI and more
+                </span>
               </div>
-              <p className="text-xs text-muted-foreground mb-3">
-                Unlock all features including AI and more
-              </p>
-              <Button
-                className="w-full h-8 text-xs"
-                size="sm"
-                // onClick={handleUpgrading}
+              <div className="w-full bg-vivid-gradient p-[1px] rounded-full">
+                <Button
+                className="w-full border-vivid bg-background-80 hover:bg-background-90 text-primary rounded-full font-bold"
+                size="lg"
+                //onClick={handleUpgrading}
+                variant={'default'}
               >
                 {loading ? "Upgrading..." : "Upgrade"}
               </Button>
+              </div>
+              
             </div>
           )}
-        </div>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+
+          <SignedIn>
+            <SidebarMenuButton 
+            size={'lg'}
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:test-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.imageUrl} alt={user.fullName || ""} />
-                <AvatarFallback className="rounded-lg">
-                  {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.fullName}</span>
-                <span className="truncate text-xs">{user.primaryEmailAddress?.emailAddress}</span>
+              <UserButton />
+              <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-semibold">
+                    {user.fullName}
+                    </span>
+                    <span className="truncate ">
+                      {user?.emailAddresses[0].emailAddress}
+                    </span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side="bottom"
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.imageUrl} alt={user.fullName || ""} />
-                  <AvatarFallback className="rounded-lg">
-                    {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.fullName}</span>
-                  <span className="truncate text-xs">{user.primaryEmailAddress?.emailAddress}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push('/settings')}>
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SignedIn>
+        </div>
+
       </SidebarMenuItem>
     </SidebarMenu>
   );

@@ -1,6 +1,7 @@
 import { getAllProjects } from "@/actions/projects";
 import NotFound from "@/components/global/not-found";
-import Project from "@/components/global/project";
+import {Project} from "@/components/global/project";
+
 import React from "react";
 
 const DashboardPage = async () => {
