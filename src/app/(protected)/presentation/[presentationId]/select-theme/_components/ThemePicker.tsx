@@ -52,10 +52,21 @@ const ThemePicker = ({ selectedTheme, themes, onThemeSelect }: Props) => {
       
       console.log("res", res);
       
-      if (res.status !== 200) {
+      // Check if the response has an error
+      if ('error' in res) {
         toast.error("Error", {
           description: res.error || "Error generating layouts",
         });
+        setLoading(false);
+        return;
+      }
+
+      // At this point, TypeScript knows res has 'data' property
+      if (res.status !== 200) {
+        toast.error("Error", {
+          description: "Error generating layouts",
+        });
+        setLoading(false);
         return;
       }
 
@@ -63,6 +74,7 @@ const ThemePicker = ({ selectedTheme, themes, onThemeSelect }: Props) => {
         toast.error("Error", {
           description: "No data received from layout generation",
         });
+        setLoading(false);
         return;
       }
 
