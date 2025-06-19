@@ -5,7 +5,6 @@ import { Home, Play, Share } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { set } from "react-hook-form";
 import { toast } from "sonner";
 
 type props = { presentationId: string };
@@ -25,7 +24,7 @@ const NavBar = ({ presentationId }: props) => {
   };
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 w-full h-20 flex justify-between items-center py-4 px-7 border-b"
+      className="fixed top-0 left-0 right-0 z-50 w-full h-14 flex justify-between items-center py-4 px-7 border-b"
       style={{
         backgroundColor:
           currentTheme.navbarColor || currentTheme.backgroundColor,

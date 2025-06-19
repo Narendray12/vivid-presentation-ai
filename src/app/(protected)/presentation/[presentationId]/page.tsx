@@ -8,8 +8,10 @@ import { redirect, useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 import { DndProvider } from "react-dnd";
-import {HTML5Backend} from 'react-dnd-html5-backend'
+import { HTML5Backend } from "react-dnd-html5-backend";
 import NavBar from "./_components/NavBar/NavBar";
+import LayoutPreview from "./_components/editor-sidebar/leftsidebar/LayoutPreview";
+import Editor from "./_components/Editor/Editor";
 const Page = () => {
   const { setSlides, setProjects, currentTheme, setCurrentTheme } =
     useSlideStore();
@@ -42,20 +44,31 @@ const Page = () => {
         setIsLoading(false);
       }
     })();
-  },[]);
+  }, []);
 
   if (isLoading) {
     return (
-        <div className="flex items-center justify-center h-screen">
-            <Loader2 className="w-8 h-8 animate-spin text-primary"></Loader2>
-        </div>
-    )
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-primary"></Loader2>
+      </div>
+    );
   }
-  return <DndProvider backend={HTML5Backend}>
-<div className="min-h-screen flex flex-col">
-    <NavBar presentationId={params.presentationId as string} />
-</div>
-  </DndProvider>
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="min-h-screen flex flex-col">
+        <NavBar presentationId={params.presentationId as string} />
+        <div className="flex-l flex  overflow-hidden pt-16" style={{color:currentTheme.accentColor,
+          fontFamily:currentTheme.fontFamily,
+          backgroundColor:currentTheme.backgroundColor
+        }}>
+          <LayoutPreview />
+          <div className="flex-1 ml-64 pr-16">
+            <Editor isEditable={true} />
+          </div>
+        </div>
+      </div>
+    </DndProvider>
+  );
 };
 
 export default Page;
