@@ -1,16 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { User } from "@prisma/client";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import { User } from '@/generated/prisma';
+import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const NewProjectButton = ({ user }: { user: User }) => {
   const router = useRouter();
 
   return (
     <Button
-      className="rounded-lg font-semibold"
+      //   size={"lg"}
+      className="rounded-lg font-semibold cursor-pointer"
       disabled={!user.subscription}
       onClick={() => router.push("/create-page")}
     >

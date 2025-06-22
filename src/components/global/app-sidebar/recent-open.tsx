@@ -1,42 +1,46 @@
-'use client'
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Projects } from "@prisma/client";
-import { JsonValue } from "@prisma/client/runtime/library";
-import React from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Project } from "@/generated/prisma";
+import { JsonValue } from "@/generated/prisma/runtime/library";
 import { useSlideStore } from "@/store/useSlideStore";
-import { FileText } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Props = {
-  recentProjects: Projects[];
+  recentProjects: Project[];
 };
 
-export const RecentOpen = ({ recentProjects }: Props) => {
-  const Router = useRouter();
+const RecentOpen = ({ recentProjects }: Props) => {
+  const router = useRouter();
   const { setSlides } = useSlideStore();
-  
-  const handleClick = (projectID: string, slides: JsonValue) => {
-    if (!projectID && !slides) {
-      toast.error("Project not found", {
+
+  const handleClick = (projectId: string, slides: JsonValue) => {
+    if (!projectId || !slides) {
+      toast.error("Project Not Found", {
         description: "Please try again",
       });
       return;
     }
+
     setSlides(JSON.parse(JSON.stringify(slides)));
-    Router.push(`/presentation/${projectID}`);
+    router.push(`/presenetation/${projectId}`);
   };
 
-  return recentProjects.length > 0 ? (
+  if (recentProjects.length === 0) {
+    return null;
+  }
+
+  return (
     <SidebarGroup>
-      <SidebarGroupLabel>Recently Opened</SidebarGroupLabel>
+      <SidebarGroupLabel>Recently Open</SidebarGroupLabel>
       <SidebarMenu>
         {recentProjects.map((item) => (
           <SidebarMenuItem key={item.id}>
@@ -48,14 +52,16 @@ export const RecentOpen = ({ recentProjects }: Props) => {
               <Button
                 onClick={() => handleClick(item.id, item.slides)}
                 variant="link"
-                className="text-xs items-center justify-center"
+                className="text-xs items-center justify-start"
               >
-                <span >{item.title}</span>
+                <span>{item.title}</span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  ) : null;
+  );
 };
+
+export default RecentOpen;

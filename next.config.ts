@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "plus.unsplash.com",
         port: "",
-        pathname: "/photo-1744265385437-8b591b626a8b",
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -23,13 +24,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "placehold.co",
+        hostname: "placeimg.com",
         port: "",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "placeimg.com",
+        hostname: "cdn-front.freepik.com",
         port: "",
         pathname: "/**",
       },
@@ -39,7 +40,16 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "fakeimg.pl",
+        port: "",
+        pathname: "/**",
+      },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

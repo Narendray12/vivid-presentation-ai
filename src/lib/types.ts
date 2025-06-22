@@ -1,27 +1,3 @@
-import { Prisma } from "@prisma/client";
-
-export type PrismaUser = Prisma.UserGetPayload<{
-  include:{PurchasedProjects: true}
-}>;
-export interface OutlineCard {
-  title: string;
-  id: string;
-  order: number;
-}
-
-export interface OutlineState {
-  cards: OutlineCard[];
-}
-
-export interface LayoutSlides {
-  slideName: string;
-  content: ContentItem;
-  className?: string;
-  type: string;
-}
-
-
-
 export interface Slide {
   id: string;
   slideName: string;
@@ -29,31 +5,6 @@ export interface Slide {
   content: ContentItem;
   slideOrder: number;
   className?: string;
-}
-export interface ContentItem {
-  id: string;
-  type: ContentType;
-  name: string;
-  content: ContentItem[] | string | string[] | string[][];
-  initialRows?: number;
-  initialColumns?: number;
-  restrictToDrop?: boolean;
-  columns?: number;
-  placeholder?: string;
-  className?: string;
-  alt?: string;
-  callOutType?: "success" | "warning" | "info" | "question" | "caution";
-  link?: string;
-  code?: string;
-  language?: string;
-  bgColor?: string;
-  isTransparent?: boolean;
-}
-
-export interface DragItem {
-  id: string;
-  type: string;
-  elementOrder: number;
 }
 
 export type ContentType =
@@ -87,6 +38,25 @@ export type ContentType =
   | "table"
   | "tableOfContents";
 
+export interface ContentItem {
+  id: string;
+  type: ContentType;
+  name: string;
+  content: ContentItem[] | string | string[] | string[][];
+  initialRows?: number;
+  initialColumns?: number;
+  restrictToDrop?: boolean;
+  columns?: number;
+  placeholder?: string;
+  className?: string;
+  alt?: string;
+  callOutType?: "success" | "warning" | "info" | "question" | "caution";
+  link?: string;
+  code?: string;
+  language?: string;
+  bgColor?: string;
+  isTransparent?: boolean;
+}
 
 export interface Theme {
   name: string;
@@ -98,15 +68,20 @@ export interface Theme {
   gradientBackground?: string;
   sidebarColor?: string;
   navbarColor?: string;
-  type: 'light' | 'dark';
+  type: "light" | "dark";
 }
 
+export interface OutlineCard {
+  id: string;
+  title: string;
+  order: number;
+}
 
-
-
-export interface LayoutGroup {
-  name: string;
-  layouts: Layout[];
+export interface LayoutSlides {
+  slideName: string;
+  content: ContentItem;
+  className?: string;
+  type: string;
 }
 
 export interface Layout {
@@ -117,17 +92,10 @@ export interface Layout {
   layoutType: string;
 }
 
-
-
-
-
-
-
-export interface ComponentGroup {
+export interface LayoutGroup {
   name: string;
-  components: Component[];
+  layouts: Layout[];
 }
-
 
 interface Component {
   name: string;
@@ -137,5 +105,7 @@ interface Component {
   componentType: string;
 }
 
-
-
+export interface ComponentGroup {
+  name: string;
+  components: Component[];
+}

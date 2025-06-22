@@ -4,12 +4,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: Props) => {
+const AuthLayout = ({ children }: Props) => {
   return (
-    <div className="w-full min-h-screen flex justify-center items-center bg-background">
+    <div className="w-full min-h-screen flex justify-center items-center">
       {children}
     </div>
   );
 };
 
-export default Layout;
+export default AuthLayout;

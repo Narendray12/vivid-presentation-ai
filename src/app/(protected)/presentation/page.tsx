@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import React from "react";
 
-const Page = () => {
-    redirect('/dashboard')
-  return <div>Presentation Page</div>;
+const PresentationPage = () => {
+  redirect("/dashboard");
+
+  return <div>PresentationPage</div>;
 };
 
-export default Page;
+export default PresentationPage;

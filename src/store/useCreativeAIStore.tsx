@@ -1,13 +1,13 @@
 import { OutlineCard } from "@/lib/types";
 import { create } from "zustand";
-import { persist, devtools } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 type CreativeAIStore = {
+  currentAiPrompt: string;
+  setCurrentAiPrompt: (prompt: string) => void;
   outlines: OutlineCard[] | [];
   addMultipleOutlines: (outlines: OutlineCard[]) => void;
   addOutline: (outline: OutlineCard) => void;
-  currentAiPrompt: string;
-  setCurrentAiPrompt: (prompt: string) => void;
   resetOutlines: () => void;
 };
 
@@ -15,25 +15,27 @@ const useCreativeAIStore = create<CreativeAIStore>()(
   persist(
     (set) => ({
       outlines: [],
+      currentAiPrompt: "",
+      addMultipleOutlines: (outlines: OutlineCard[]) => {
+        set(() => ({
+          outlines: [...outlines],
+        }));
+      },
       addOutline: (outline: OutlineCard) => {
         set((state) => ({
           outlines: [outline, ...state.outlines],
         }));
       },
-      addMultipleOutlines: (outlines: OutlineCard[]) => {
-        set(() => ({ outlines: [...outlines] }));
-      },
-      currentAiPrompt: "",
-      setCurrentAiPrompt: (prompt: string) => {
-        set(() => ({ currentAiPrompt: prompt }));
-      },
       resetOutlines: () => {
-        set(() => ({ outlines: [] }));
+        set(() => ({
+          outlines: [],
+        }));
+      },
+      setCurrentAiPrompt: (prompt: string) => {
+        set({ currentAiPrompt: prompt });
       },
     }),
-    {
-      name: "creative-ai",
-    }
+    { name: "creative-ai" }
   )
 );
 

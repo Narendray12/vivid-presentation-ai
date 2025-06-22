@@ -1,15 +1,22 @@
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+"use client";
+import About from "./_components/about";
+import Footer from "./_components/footer";
+import Hero from "./_components/hero";
+import Navbar from "./_components/navbar";
+import Subscription from "./_components/subscription";
 
-export default async function Home() {
-  // Check if user is already signed in
-  const user = await currentUser();
-  
-  if (user) {
-    // If user is signed in, redirect to dashboard
-    redirect("/dashboard");
-  } else {
-    // If user is not signed in, redirect to sign-in page
-    redirect("/sign-in");
-  }
-}
+const Index = () => {
+  return (
+    <div className="min-h-screen flex flex-col items-center w-full">
+      <Navbar />
+      <main className="flex-grow">
+        <Hero />
+        <About />
+        <Subscription />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Index;

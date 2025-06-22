@@ -1,29 +1,25 @@
 "use client";
 
 import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    SidebarGroup,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
-const NavMain = ({
-  items,
-}: {
+type Props = {
   items: {
     title: string;
     url: string;
-    icon: React.FC<React.SVGProps<SVGSVGElement>>;
+    icon: LucideIcon;
     isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
   }[];
-}) => {
+};
+
+const NavMain = ({ items }: Props) => {
   const pathname = usePathname();
 
   return (
@@ -34,8 +30,7 @@ const NavMain = ({
             <SidebarMenuButton
               asChild
               tooltip={item.title}
-              isActive={pathname.includes(item.url)}
-              className="bg-background-80 "
+              className={`${pathname.includes(item.url) && "bg-muted"}`}
             >
               <Link
                 href={item.url}
@@ -43,7 +38,7 @@ const NavMain = ({
                   pathname.includes(item.url) && "font-bold"
                 }`}
               >
-                <item.icon />
+                <item.icon className="text-lg" />
                 <span>{item.title}</span>
               </Link>
             </SidebarMenuButton>

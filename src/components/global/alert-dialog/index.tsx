@@ -1,24 +1,23 @@
 import {
-  AlertDialog,
-  AlertDialogFooter,
-  AlertDialogHeader,
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
+import React from "react";
 
-type props = {
+type Props = {
   children: React.ReactNode;
   className?: string;
-  description?: string;
+  description: string;
   loading?: boolean;
-  onclick?: () => void;
+  onClick?: () => void;
   open: boolean;
   handleOpen: () => void;
 };
@@ -28,10 +27,10 @@ const AlertDialogBox = ({
   className,
   description,
   loading,
-  onclick,
+  onClick,
   open,
   handleOpen,
-}: props) => {
+}: Props) => {
   return (
     <AlertDialog open={open} onOpenChange={handleOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -44,19 +43,19 @@ const AlertDialogBox = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             variant={"destructive"}
-            className={`${className}`}
-            onClick={onclick}
+            className={className}
+            onClick={onClick}
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader className="animate-spin" />
                 Loading...
               </>
             ) : (
               "Continue"
             )}
           </Button>
-        </AlertDialogFooter>
+        </AlertDialogFooter>{" "}
       </AlertDialogContent>
     </AlertDialog>
   );

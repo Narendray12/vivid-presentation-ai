@@ -1,30 +1,43 @@
-'use client';
-import React, { useEffect } from "react";
-import { Switch } from "@/components/ui/switch";
-import { useTheme } from "next-themes";
-const ThemeSwiter = () => {
-    const [mounted, setMounted] = React.useState(false);
-    const {theme, setTheme} = useTheme();
+"use client";
 
-    useEffect(()=>{
-        setMounted(true)
-    },[])
-    if(!mounted){
-        return null
-    }
-  return (
-    <div className="ps-3 pe-3">
-        <Switch checked={theme === "light"}
-        className="h-8 w-14 data-[state=checked]:bg-primary-80 "
-        area-label="Toggle dark mode"
-        onCheckedChange={()=>{
-            setTheme(theme=='dark'?'light':'dark')
-        }}
-        >
-           
-        </Switch>
-    </div>
-  )
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+
+const ThemeSwitcher = () => {
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
   }
 
-export default ThemeSwiter;
+  return (
+    <div className="w-fit">
+      <Button
+        className="cursor-pointer rounded-lg"
+        variant={"secondary"}
+        size={"lg"}
+        onClick={() => {
+          setTheme(theme === "dark" ? "light" : "dark");
+        }}
+      >
+        {theme == "light" ? <Moon /> : <Sun />}
+      </Button>
+      {/* <Switch
+        checked={theme === "light"}
+        size={"lg"}
+        className="pl-1 data-[state=checked]:bg-gray-200"
+        onCheckedChange={() => }
+        aria-label="Toggle dark mode"
+      /> */}
+    </div>
+  );
+};
+
+export default ThemeSwitcher;

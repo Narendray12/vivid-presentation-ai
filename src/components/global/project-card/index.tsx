@@ -1,70 +1,77 @@
 "use client";
 
-import { JsonValue } from "@prisma/client/runtime/library";
-import React from "react";
-import { motion } from "framer-motion";
-import { itemVariants, themes, timeAgo } from "@/lib/constants";
-import { useSlideStore } from "@/store/useSlideStore";
-import { useRouter } from "next/navigation";
-import ThumbnailPreview from "./thumbnail-preview";
-import AlertDialogBox from "../alert-dialog";
+import { deleteProject, recoverProject } from "@/actions/project";
+// import { buyTemplate } from "@/actions/stripe";
 import { Button } from "@/components/ui/button";
+import { Project } from "@/generated/prisma";
+import { itemVariants, themes } from "@/lib/constants";
+import { timeAgo } from "@/lib/utils";
+import { useSlideStore } from "@/store/useSlideStore";
+import { JsonValue } from "@prisma/client/runtime/library";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { deleteProject, recoverProject } from "@/actions/projects";
+import AlertDialogBox from "../alert-dialog";
+import ThumbnailPreview from "./thumbnail-preview";
 
-type props = {
+type Props = {
   projectId: string;
   title: string;
-  CreatedAt: string;
-  isDeleted: boolean;
+  createdAt: string;
+  isDeleted?: boolean;
+  isSellable?: boolean;
   slideData: JsonValue;
   themeName: string;
+  forSold?: boolean;
+  project: Project;
 };
+
 const ProjectCard = ({
   projectId,
   title,
-  CreatedAt,
+  createdAt,
+  themeName,
   isDeleted,
   slideData,
-  themeName,
-}: props) => {
-  const [loading, setLoading] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const { setSlides } = useSlideStore();
+  forSold,
+}: Props) => {
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { setSlides } = useSlideStore();
+
   const handleNavigation = () => {
     setSlides(JSON.parse(JSON.stringify(slideData)));
-    router.push("/presentation/" + projectId);
+    router.push(`/presentation/${projectId}`);
   };
-  const theme = themes.find((theme) => theme.name === themeName) || themes[0];
 
   const handleRecover = async () => {
     setLoading(true);
     if (!projectId) {
       setLoading(false);
-      toast("Error", {
-        description: "Project not found.",
+      toast.error("Error", {
+        description: "Project not found",
       });
       return;
     }
+
     try {
       const res = await recoverProject(projectId);
-      if(res.status!==200){
-        setLoading(false);
-        toast("Error", {
-          description: "Error recovering project.",
+      if (res.status !== 200) {
+        toast.error("Oppse!", {
+          description: res.error || "Something went wrong!",
         });
-        return
+        return;
       }
-      setOpen(false)
-      router.refresh()
-      toast("Success", {
-        description: "Project recovered successfully.",
+      setOpen(false);
+      router.refresh();
+      toast.success("Success", {
+        description: "Project recovered successfully",
       });
     } catch (error) {
-      setLoading(false);
-      toast("Error", {
-        description: "Error recovering project.",
+      toast.error("Oppse!", {
+        description: "Something went wrong! Please contact support.",
       });
     }
   };
@@ -73,33 +80,46 @@ const ProjectCard = ({
     setLoading(true);
     if (!projectId) {
       setLoading(false);
-      toast("Error", {
-        description: "Project not found.",
+      toast.error("Error", {
+        description: "Project not found",
       });
       return;
     }
+
     try {
       const res = await deleteProject(projectId);
-      if(res.status!==200){
-        setLoading(false);
-        toast("Error", {
-          description: "Error deleting project.",
+      if (res.status !== 200) {
+        toast.error("Oppse!", {
+          description: res.error || "Something went wrong!",
         });
-        return
+        return;
       }
-      setOpen(false)
-      router.refresh()
-      toast("Success", {
-        description: "Project deleted successfully.",
+      setOpen(false);
+      router.refresh();
+      toast.success("Success", {
+        description: "Project deleted successfully",
       });
     } catch (error) {
-      setLoading(false);
-      toast("Error", {
-        description: "Error deleting project.",
+      toast.error("Oppse!", {
+        description: "Something went wrong! Please contact support.",
       });
     }
   };
-  {console.log(isDeleted ? 'deleted' : 'not deleted')}
+
+  // const handleBuyTemplate = async () => {
+  //   const res = await buyTemplate(project!);
+  //   if (res.status !== 200) {
+  //     toast.error("Error", {
+  //       description: res.error || "Something went wrong",
+  //     });
+  //     return;
+  //   }
+
+  //   if (res.url) {
+  //     router.replace(res.url);
+  //   }
+  // };
+
   return (
     <motion.div
       className={`group w-full flex flex-col gap-y-3 rounded-xl p-3 transition-colors ${
@@ -108,39 +128,49 @@ const ProjectCard = ({
       variants={itemVariants}
     >
       <div
-        className="realative aspect-[16/10] overflow-hidden rounded-lg cursor-pointer"
+        className="relative aspect-[16/10] overflow-hidden rounded-lg cursor-pointer"
         onClick={handleNavigation}
       >
         <ThumbnailPreview
-          theme={theme}
+          theme={themes.find((theme) => themeName == theme?.name) || themes[0]}
           slide={JSON.parse(JSON.stringify(slideData))?.[0]}
         />
       </div>
       <div className="w-full">
         <div className="space-y-1">
-          <h3 className="font-semibold text-base text-primary line-clamp-1">
-            {title} 
+          <h3 className="font-semibold text-base dark:text-white/90 text-black/90 line-clamp-1">
+            {title}
           </h3>
           <div className="flex w-full justify-between items-center gap-2">
             <p
-              className="text-sm text-muted-forground"
+              className="text-sm text-muted-foreground"
               suppressHydrationWarning
             >
-              {timeAgo(CreatedAt)}
+              {timeAgo(createdAt)}
             </p>
-            {isDeleted ? (
+            {forSold ? (
+              <Button
+                size={"sm"}
+                variant={"ghost"}
+                className="bg-muted dark:bg-muted"
+                disabled={loading}
+                // onClick={handleBuyTemplate}
+              >
+                Buy
+              </Button>
+            ) : isDeleted ? (
               <AlertDialogBox
-                description="this will recover your project and restore your data."
+                description="This will recover your project and restore your data."
                 className="bg-green-500 text-white dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700"
                 loading={loading}
                 open={open}
                 handleOpen={() => setOpen(!open)}
-                onclick={handleRecover}
+                onClick={handleRecover}
               >
                 <Button
-                  size="sm"
-                  variant="ghost"
-                  className="bg-background-80 dark:hover:bg-background-90"
+                  size={"sm"}
+                  variant={"ghost"}
+                  className="bg-muted dark:bg-muted"
                   disabled={loading}
                 >
                   Recover
@@ -148,17 +178,17 @@ const ProjectCard = ({
               </AlertDialogBox>
             ) : (
               <AlertDialogBox
-                description="This will delete your project and send to trash."
+                description="This will recover your project and restore your data."
                 className="bg-red-500 text-white dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700"
-                onclick={handleDelete}
                 loading={loading}
                 open={open}
                 handleOpen={() => setOpen(!open)}
+                onClick={handleDelete}
               >
                 <Button
-                  size="sm"
-                  variant="ghost"
-                  className="bg-background-80 dark:hover:bg-background-90"
+                  size={"sm"}
+                  variant={"ghost"}
+                  className="bg-muted dark:bg-muted"
                   disabled={loading}
                 >
                   Delete
